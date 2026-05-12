@@ -20,7 +20,7 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-#include "Star.h"
+
 
 Game::Game(MainWindow& wnd)
 	:
@@ -29,6 +29,7 @@ Game::Game(MainWindow& wnd)
 	ct(gfx),
 	cam(ct)
 {
+	/*
 	//create entities -> rendered by camera 
 	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ 460.0f,0.0f });
 	entities.emplace_back(Star::Make(150.0f, 50.0f), Vec2{ 150.0f,300.0f });
@@ -37,6 +38,8 @@ Game::Game(MainWindow& wnd)
 	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ 0.0f,0.0f });
 	entities.emplace_back(Star::Make(200.0f, 50.0f), Vec2{ -150.0f,-300.0f });
 	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ 400.0f,300.0f });
+	*/
+	sf.generateField();
 }
 
 void Game::Go()
@@ -87,7 +90,7 @@ void Game::ComposeFrame()
 	//Camera((Coordinate Transformer(Drawable(gfx draw polyline))))
 	//camera transformations -> coordinate to center origin -> model -> line
 	//model vertices stored in entity
-	for (const auto& entity : entities)
+	for (const auto& entity : sf.getEntities())
 	{
 		cam.Draw(entity.GetDrawable());
 	}

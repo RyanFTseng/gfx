@@ -26,6 +26,7 @@
 #include "Entity.h"
 #include "CoordinateTransformer.h"
 #include "Star.h"
+#include "Starfield.h"
 #include "Camera.h"
 
 class Game
@@ -50,5 +51,6 @@ private:
 	CoordinateTransformer ct;
 	Camera cam;
 	std::vector<Entity> entities;
+	Starfield sf = Starfield(10000, 6000);
 	/********************************/
 };
