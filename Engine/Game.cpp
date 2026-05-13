@@ -70,9 +70,31 @@ void Game::UpdateModel()
 		cam.MoveBy({ speed,0.0f });
 	}
 
+
+	
+
 	while (!wnd.mouse.IsEmpty())
 	{
+		
+
 		const auto e = wnd.mouse.Read();
+		//save mouse pos on click
+		if (e.GetType() == Mouse::Event::Type::LPress)
+		{
+			prevMouseX = e.GetPosX();
+			prevMouseY = e.GetPosY();
+		}
+		//check if mouse is moving and mouse is pressed down
+		else if (e.GetType() == Mouse::Event::Type::Move && wnd.mouse.LeftIsPressed())
+		{
+			float xSpeed = prevMouseX - (float)e.GetPosX();
+			float ySpeed = prevMouseY - (float)e.GetPosY();
+			cam.MoveBy({ xSpeed / cam.GetScale(), -ySpeed/cam.GetScale()});
+			prevMouseX = e.GetPosX();
+			prevMouseY = e.GetPosY();
+		}
+		
+		
 		if (e.GetType() == Mouse::Event::Type::WheelUp)
 		{
 			cam.SetScale(cam.GetScale() * 1.05f);

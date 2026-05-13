@@ -52,5 +52,7 @@ private:
 	Camera cam;
 	std::vector<Entity> entities;
 	Starfield sf = Starfield(10000, 6000);
+	int prevMouseX;
+	int prevMouseY;
 	/********************************/
 };
