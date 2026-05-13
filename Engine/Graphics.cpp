@@ -378,6 +378,35 @@ void Graphics::DrawClosedPolyline( const std::vector<Vec2>& verts,Color c )
 	DrawLine( verts.back(),verts.front(),c );
 }
 
+void Graphics::DrawClosedPolyline(const std::vector<Vec2>& verts, const Vec2& translation, float scale_x, float scale_y, Color c)
+{
+	//transformation lambda
+	const auto xform = [&](Vec2 v)
+	{
+		v.x *= scale_x;
+		v.y *= scale_y;
+		v += translation;
+		return v;
+	};
+
+	//transform 0th vertex
+	const Vec2 front = xform(verts.front());
+	//current = 0th vertex
+	Vec2 cur = front;
+
+	for (auto i = verts.begin(); i != std::prev(verts.end()); i++)
+	{
+		//apply transformation to vertex after current
+		const Vec2 next = xform(*std::next(i));
+		//draw line from current to transformed vertex
+		DrawLine(cur, next, c);
+		//set next vertex to new current
+		cur = next;
+	}
+	//close polyline
+	DrawLine(cur, front, c);
+}
+
 
 //////////////////////////////////////////////////
 //           Graphics Exception
