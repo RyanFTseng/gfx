@@ -34,6 +34,8 @@ public:
 		std::uniform_int_distribution<size_t> colorSampler(0, std::end(colors) - std::begin(colors));
 		std::normal_distribution<float> colorFreqDist(meanColorFreq, devColorFreq);
 		std::uniform_real_distribution<float> phaseDist(0.0f, 2.0f * 3.14159f);
+		std::normal_distribution<float> radiusAmplitudeDist(meanRadiusAmplitude, devRadiusAmplitude);
+		std::normal_distribution<float> radiusFreqDist(meanRadiusFreq, devRadiusFreq);
 
 		while (stars.size() < nStars)
 		{
@@ -58,9 +60,13 @@ public:
 			const int nFlares = std::clamp((int)flareDist(rng), minFlares, maxFlares);
 			const float colorFreq = std::clamp(colorFreqDist(rng), minColorFreq, maxColorFreq);
 			const float colorPhase = phaseDist(rng);
-			stars.emplace_back(pos, rad, rat, nFlares, c, colorFreq, colorPhase);
+			const float radiusAmplitude = std::clamp(radiusAmplitudeDist(rng), minRadiusAmplitude, maxRadiusAmplitude);
+			const float radiusFreq = radiusFreqDist(rng);
+			const float radiusPhase = phaseDist(rng);
+			
 			//place star in container
-			//stars.emplace_back(pos, rad, rat, nFlares, c);
+			stars.emplace_back(pos, rad, rat, nFlares, c, colorFreq, colorPhase, radiusAmplitude, radiusFreq, radiusPhase);
+
 		}
 
 		
@@ -84,6 +90,14 @@ private:
 	static constexpr float minColorFreq = 0.6f;
 	static constexpr float maxColorFreq = 4.0f;
 	static constexpr int maxFlares = 10;
+	static constexpr float meanRadiusAmplitude = 0.5f;
+	static constexpr float devRadiusAmplitude = 0.3f;
+	static constexpr float minRadiusAmplitude = 0.1f;
+	static constexpr float maxRadiusAmplitude = 0.9f;
+	static constexpr float meanRadiusFreq = 1.8f;
+	static constexpr float devRadiusFreq = 1.0f;
+	static constexpr float minRadiusFreq = 0.6f;
+	static constexpr float maxRadiusFreq = 4.0f;
 
 
 

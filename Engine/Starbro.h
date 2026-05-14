@@ -6,17 +6,25 @@
 class Starbro : public Entity
 {
 public:
-	Starbro(Vec2 pos, float radius, float innerRatio, int nFlares, Color c, float colorFreq, float colorPhase)
+	Starbro(Vec2 pos, float radius, float innerRatio, int nFlares, Color c, float colorFreq, float colorPhase,
+		float radiusFactorAmplitude, float radiusFactorFreq, float radiusFactorPhase)
 		:
 		Entity(Star::Make(radius, radius* innerRatio, nFlares), pos, c),
 		radius(radius),
 		colorFreqFactor(colorFreq * 2.0f * 3.14159f),
 		colorPhase(colorPhase),
-		baseColor(c)
+		baseColor(c),
+		radiusFactorAmplitude(radiusFactorAmplitude),
+		radiusFactorFreq(radiusFactorFreq),
+		radiusFactorPhase(radiusFactorPhase)
 	{}
 	float GetRadius() const
 	{
-		return radius;
+		return radius * GetScale();
+	}
+	float GetMaxRadius() const
+	{
+		return radius * (1.0f * radiusFactorAmplitude);
 	}
 	RectF GetBoundingRectangle() const
 	{
@@ -26,6 +34,7 @@ public:
 	{
 		time += dt;
 		UpdateColor();
+		UpdateScale();
 	}
 private:
 	void UpdateColor()
@@ -37,10 +46,18 @@ private:
 		c.SetB(std::min(baseColor.GetB() + offset, 255));
 		SetColor(c);
 	}
+	void UpdateScale()
+	{
+		const float factor = radiusFactorAmplitude * sin(radiusFactorFreq * time + radiusFactorAmplitude);
+		SetScale(1.0f + factor);
+	}
 private:
 	float radius;
 	Color baseColor;
 	float colorFreqFactor;
 	float colorPhase;
 	float time = 0;
+	float radiusFactorPhase;
+	float radiusFactorFreq;
+	float radiusFactorAmplitude;
 };

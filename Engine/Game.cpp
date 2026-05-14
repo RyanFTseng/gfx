@@ -126,7 +126,7 @@ void Game::ComposeFrame()
 	{
 		if (entity.GetBoundingRectangle().IsOverlappingWith(vp))
 		{
-			//entity.SetRadius(entity.GetRadius() + 1);
+			
 			cam.Draw(entity.GetDrawable());
 		}
 	}
