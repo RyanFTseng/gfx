@@ -1,6 +1,8 @@
 #pragma once
 
 #include "CoordinateTransformer.h"
+#include "RectF.h"
+#include "Graphics.h"
 
 class Camera
 {
@@ -21,11 +23,8 @@ public:
 	{
 		pos = pos_in;
 	}
-
-	//draw drawable
 	void Draw(Drawable& drawable) const
 	{
-		//apply negative translation when camera pans
 		drawable.Translate(-pos);
 		drawable.Scale(scale);
 		ct.Draw(drawable);
@@ -38,10 +37,9 @@ public:
 	{
 		return scale;
 	}
-
 	RectF getViewportRect() const
 	{
-		const float	zoom = 1.0f / scale;
+		const float zoom = 1.0f / scale;
 		return RectF::FromCenter(
 			pos,
 			float(Graphics::ScreenWidth / 2) * zoom,

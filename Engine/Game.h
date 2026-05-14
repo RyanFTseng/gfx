@@ -28,6 +28,7 @@
 #include "Star.h"
 #include "Starfield.h"
 #include "Camera.h"
+#include "FrameTimer.h"
 
 class Game
 {
@@ -54,5 +55,6 @@ private:
 	Starfield sf = Starfield(10000, 6000);
 	int prevMouseX;
 	int prevMouseY;
+	FrameTimer ft;
 	/********************************/
 };

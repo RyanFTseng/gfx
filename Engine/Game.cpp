@@ -20,8 +20,6 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-
-
 Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
@@ -52,6 +50,9 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	const float dt = ft.Mark();
+	
+
 	const float speed = 3.0f;
 	if (wnd.kbd.KeyIsPressed(VK_DOWN))
 	{
@@ -104,6 +105,11 @@ void Game::UpdateModel()
 			cam.SetScale(cam.GetScale() * 0.95f);
 		}
 	}
+
+	for (auto& entity : sf.getEntities())
+	{
+		entity.Update(dt);
+	}
 }
 
 void Game::ComposeFrame()
@@ -116,11 +122,13 @@ void Game::ComposeFrame()
 
 	const auto vp = cam.getViewportRect();
 
-	for (const auto& entity : sf.getEntities())
+	for (auto& entity : sf.getEntities())
 	{
 		if (entity.GetBoundingRectangle().IsOverlappingWith(vp))
 		{
+			//entity.SetRadius(entity.GetRadius() + 1);
 			cam.Draw(entity.GetDrawable());
 		}
 	}
 }
+

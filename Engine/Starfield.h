@@ -15,7 +15,7 @@ public:
 
 	{}
 
-	std::vector<Starbro> getEntities()
+	std::vector<Starbro>& getEntities()
 	{
 		return stars;
 	}
@@ -32,6 +32,8 @@ public:
 		std::normal_distribution<float> flareDist(meanFlares, devFlares);
 		const Color colors[] = { Colors::Red, Colors::White, Colors::Yellow, Colors::Magenta, Colors::Blue, Colors::Cyan, Colors::Green };
 		std::uniform_int_distribution<size_t> colorSampler(0, std::end(colors) - std::begin(colors));
+		std::normal_distribution<float> colorFreqDist(meanColorFreq, devColorFreq);
+		std::uniform_real_distribution<float> phaseDist(0.0f, 2.0f * 3.14159f);
 
 		while (stars.size() < nStars)
 		{
@@ -54,8 +56,11 @@ public:
 			const auto rat = std::clamp(ratDist(rng), minInnerRatio, maxInnerRatio);
 			const Color c = colors[colorSampler(rng)];
 			const int nFlares = std::clamp((int)flareDist(rng), minFlares, maxFlares);
+			const float colorFreq = std::clamp(colorFreqDist(rng), minColorFreq, maxColorFreq);
+			const float colorPhase = phaseDist(rng);
+			stars.emplace_back(pos, rad, rat, nFlares, c, colorFreq, colorPhase);
 			//place star in container
-			stars.emplace_back(pos, rad, rat, nFlares, c);
+			//stars.emplace_back(pos, rad, rat, nFlares, c);
 		}
 
 		
@@ -74,6 +79,10 @@ private:
 	static constexpr float meanFlares = 6.5f;
 	static constexpr float devFlares = 2.0f;
 	static constexpr int minFlares = 3;
+	static constexpr float meanColorFreq = 1.8f;
+	static constexpr float devColorFreq = 1.0f;
+	static constexpr float minColorFreq = 0.6f;
+	static constexpr float maxColorFreq = 4.0f;
 	static constexpr int maxFlares = 10;
 
 
