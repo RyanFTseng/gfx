@@ -27,6 +27,7 @@ public:
 		std::mt19937 rng(dev());
 		std::uniform_real_distribution<float> xDist(-width / 2.0f, width / 2.0f);
 		std::uniform_real_distribution<float> yDist(-height / 2.0f, height / 2.0f);
+
 		std::normal_distribution<float> radDist(meanStarRadius, devStarRadius);
 		std::normal_distribution<float> ratDist(meanInnerRatio, devInnerRatio);
 		std::normal_distribution<float> flareDist(meanFlares, devFlares);
@@ -41,14 +42,16 @@ public:
 		{
 			//generate radius and position
 			const auto rad = std::clamp(radDist(rng), minStarRadius, maxStarRadius);
-			const Vec2 pos = { xDist(rng), yDist(rng) };
+			const float radiusAmplitude = std::clamp(radiusAmplitudeDist(rng), minRadiusAmplitude, maxRadiusAmplitude);
+			const float maxRad = rad * (1.0f + radiusAmplitude);
+			const Vec2 pos = { xDist(rng),yDist(rng) };
 			//check for overlaps with star
 			if (std::any_of(stars.begin(), stars.end(), [&](const Starbro& sb)
 			{
 				//check new star against each existing star(sb)
 				//check if distance between the star postitions is less than the sum of the distance between their radii
 				//overlap detected if true
-				return (sb.GetPos() -pos).Len() < rad + sb.GetRadius(); }))
+				return (sb.GetPos() -pos).Len() < maxRad + sb.GetMaxRadius(); }))
 			{
 				//retry if overlap detected
 				continue;
@@ -60,7 +63,6 @@ public:
 			const int nFlares = std::clamp((int)flareDist(rng), minFlares, maxFlares);
 			const float colorFreq = std::clamp(colorFreqDist(rng), minColorFreq, maxColorFreq);
 			const float colorPhase = phaseDist(rng);
-			const float radiusAmplitude = std::clamp(radiusAmplitudeDist(rng), minRadiusAmplitude, maxRadiusAmplitude);
 			const float radiusFreq = radiusFreqDist(rng);
 			const float radiusPhase = phaseDist(rng);
 			

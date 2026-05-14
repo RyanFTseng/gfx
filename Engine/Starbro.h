@@ -24,7 +24,7 @@ public:
 	}
 	float GetMaxRadius() const
 	{
-		return radius * (1.0f * radiusFactorAmplitude);
+		return radius * (1.0f + radiusFactorAmplitude);
 	}
 	RectF GetBoundingRectangle() const
 	{
