@@ -39,6 +39,16 @@ public:
 		return scale;
 	}
 
+	RectF getViewportRect() const
+	{
+		const float	zoom = 1.0f / scale;
+		return RectF::FromCenter(
+			pos,
+			float(Graphics::ScreenWidth / 2) * zoom,
+			float(Graphics::ScreenHeight / 2) * zoom
+		);
+	}
+
 private:
 	Vec2 pos = { 0.0f,0.0f };
 	float scale = 1.0f;

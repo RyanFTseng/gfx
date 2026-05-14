@@ -108,12 +108,19 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+
 	//render pipeline: 
 	//Camera((Coordinate Transformer(Drawable(gfx draw polyline))))
 	//camera transformations -> coordinate to center origin -> model -> line
 	//model vertices stored in entity
+
+	const auto vp = cam.getViewportRect();
+
 	for (const auto& entity : sf.getEntities())
 	{
-		cam.Draw(entity.GetDrawable());
+		if (entity.GetBoundingRectangle().IsOverlappingWith(vp))
+		{
+			cam.Draw(entity.GetDrawable());
+		}
 	}
 }

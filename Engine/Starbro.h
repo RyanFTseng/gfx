@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "Star.h"
+#include "RectF.h"
 
 class Starbro : public Entity
 {
@@ -14,6 +15,10 @@ public:
 	float GetRadius() const
 	{
 		return radius;
+	}
+	RectF GetBoundingRectangle() const
+	{
+		return RectF::FromCenter(GetPos(), GetRadius(), GetRadius());
 	}
 private:
 	float radius;
