@@ -29,6 +29,10 @@
 #include "Starfield.h"
 #include "Camera.h"
 #include "FrameTimer.h"
+#include "Plank.h"
+#include "SpawnPoint.h"
+#include "Ball.h"
+#include "Sound.h"
 
 class Game
 {
@@ -52,9 +56,16 @@ private:
 	CoordinateTransformer ct;
 	Camera cam;
 	std::vector<Entity> entities;
-	Starfield sf = Starfield(10000, 6000);
+	//Starfield sf = Starfield(10000, 6000);
 	int prevMouseX;
 	int prevMouseY;
 	FrameTimer ft;
+	std::vector<Ball> balls;
+	SpawnPoint spawn;
+	static constexpr float maxBallDistance = 2000.0f;
+	Plank plank;
+
+	Sound collideSound = (L"Sounds\\arkpad.wav");
+
 	/********************************/
 };

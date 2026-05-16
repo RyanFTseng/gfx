@@ -20,24 +20,19 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include "ChiliMath.h"
 Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
 	ct(gfx),
-	cam(ct)
+	cam(ct),
+	plank({ 100.0f,200.0f }, -380.0f, -100.0f, 290.0f),
+	spawn(balls, 15.0f, { 0.0f,-250.0f }, -100.0f, 25.0f, 150.0f, 2.0f)
 {
-	/*
-	//create entities -> rendered by camera 
-	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ 460.0f,0.0f });
-	entities.emplace_back(Star::Make(150.0f, 50.0f), Vec2{ 150.0f,300.0f });
-	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ 250.0f,-200.0f });
-	entities.emplace_back(Star::Make(150.0f, 50.0f), Vec2{ -250.0f,200.0f });
-	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ 0.0f,0.0f });
-	entities.emplace_back(Star::Make(200.0f, 50.0f), Vec2{ -150.0f,-300.0f });
-	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ 400.0f,300.0f });
-	*/
-	sf.generateField();
+	
+	//sf.generateField();
+	
 }
 
 void Game::Go()
@@ -50,28 +45,56 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+
+
+
 	const float dt = ft.Mark();
+
 	
+
+	for (auto& ball : balls)
+	{
+		const auto plankPts = plank.GetPoints();
+		
+		if (DistancePointLine(plankPts.first, plankPts.second,ball.GetPos())< ball.GetRadius() && !ball.GetHit())
+		{
+			
+			const Vec2 w = plank.GetPlankSurfaceVector().GetNormalized();
+			const Vec2 v = ball.GetVel();
+			ball.SetVel((w * (v * w) * 2.0f - v));
+			collideSound.Play();
+			ball.SetHit(true);
+		}
+
+		ball.Update(dt);
+	}
+	spawn.Update(dt);
+
 
 	const float speed = 3.0f;
 	if (wnd.kbd.KeyIsPressed(VK_DOWN))
 	{
-		cam.MoveBy({ 0.0f,-speed });
+		plank.MoveFreeY(-2.0f);
 	}
 	if (wnd.kbd.KeyIsPressed(VK_UP))
 	{
-		cam.MoveBy({ 0.0f,speed });
+		plank.MoveFreeY(2.0f);
 	}
 	if (wnd.kbd.KeyIsPressed(VK_LEFT))
 	{
-		cam.MoveBy({ -speed,0.0f });
+		//cam.MoveBy({ -speed,0.0f });
 	}
 	if (wnd.kbd.KeyIsPressed(VK_RIGHT))
 	{
-		cam.MoveBy({ speed,0.0f });
+		//cam.MoveBy({ speed,0.0f });
 	}
 
-
+	const auto new_end = std::remove_if(balls.begin(), balls.end(),
+		[this](const Ball& b)
+		{
+			return b.GetPos().LenSq() > maxBallDistance * maxBallDistance;
+		});
+	balls.erase(new_end, balls.end());
 	
 
 	while (!wnd.mouse.IsEmpty())
@@ -106,10 +129,13 @@ void Game::UpdateModel()
 		}
 	}
 
+	/*
 	for (auto& entity : sf.getEntities())
 	{
 		entity.Update(dt);
+	
 	}
+	*/
 }
 
 void Game::ComposeFrame()
@@ -121,7 +147,12 @@ void Game::ComposeFrame()
 	//model vertices stored in entity
 
 	const auto vp = cam.getViewportRect();
-
+	cam.Draw(plank.GetDrawable());
+	for (const auto& ball : balls)
+	{
+		cam.Draw(ball.GetDrawable());
+	}
+	/*
 	for (auto& entity : sf.getEntities())
 	{
 		if (entity.GetBoundingRectangle().IsOverlappingWith(vp))
@@ -130,5 +161,6 @@ void Game::ComposeFrame()
 			cam.Draw(entity.GetDrawable());
 		}
 	}
+	*/
 }
 

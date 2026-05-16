@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChiliException.h" />
+    <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="ChiliWin.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="COMInitializer.h" />
@@ -157,12 +158,14 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundEffect.h" />
+    <ClInclude Include="SpawnPoint.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="Starbro.h" />
     <ClInclude Include="Starfield.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ball.h" />
     <ClCompile Include="COMInitializer.cpp" />
     <ClCompile Include="DXErr.cpp" />
     <ClCompile Include="FrameTimer.cpp" />
@@ -172,6 +175,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="Plank.h" />
     <ClCompile Include="RectF.cpp" />
     <ClCompile Include="Sound.cpp" />
   </ItemGroup>
