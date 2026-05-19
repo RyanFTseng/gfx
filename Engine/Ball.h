@@ -28,16 +28,7 @@ public:
 	{
 		TranslateBy(vel * dt);
 	}
-	void SetHit(bool h)
-	{
-		hit = h;
-	}
-	bool GetHit()
-	{
-		return hit;
-	}
 private:
-	bool hit = false;
 	float radius;
 	Vec2 vel;
 };

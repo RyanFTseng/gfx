@@ -31,7 +31,7 @@ Game::Game(MainWindow& wnd)
 	spawn(balls, 15.0f, { 0.0f,-250.0f }, -100.0f, 25.0f, 150.0f, 2.0f)
 {
 	
-	//sf.generateField();
+	sf.generateField();
 	
 }
 
@@ -50,52 +50,70 @@ void Game::UpdateModel()
 
 	const float dt = ft.Mark();
 
+	t += dt;
+	
+	star = Star::Make(150.0f, 60.0f);
+	const float theta = t * PI;
+
+	for (auto& pt : star)
+	{
+		pt.Rotate(theta);
+	}
+
 	
 
-	for (auto& ball : balls)
-	{
-		const auto plankPts = plank.GetPoints();
-		
-		if (DistancePointLine(plankPts.first, plankPts.second,ball.GetPos())< ball.GetRadius() && !ball.GetHit())
-		{
-			
-			const Vec2 w = plank.GetPlankSurfaceVector().GetNormalized();
-			const Vec2 v = ball.GetVel();
-			ball.SetVel((w * (v * w) * 2.0f - v));
-			collideSound.Play();
-			ball.SetHit(true);
-		}
+	//for (auto& ball : balls)
+	//{
+	//	const auto plankPts = plank.GetPoints();
+	//	
+	//	const auto plankVector = plank.GetPlankSurfaceVector();
+	//	const auto plankNormal = Vec2{ plankVector.y, -plankVector.x };
+	//	const auto ballPos = ball.GetPos();
 
-		ball.Update(dt);
-	}
-	spawn.Update(dt);
+	//	if (plankNormal * ball.GetVel() < 0.0f)
+	//	{
+	//		if (DistancePointLine(plankPts.first, plankPts.second, ball.GetPos()) < ball.GetRadius())
+	//		{
+
+	//			const Vec2 w = plank.GetPlankSurfaceVector().GetNormalized();
+	//			const Vec2 v = ball.GetVel();
+	//			ball.SetVel((w * (v * w) * 2.0f - v));
+	//			collideSound.Play();
+	//		}
+	//	}
+
+	//	
+
+	//	ball.Update(dt);
+	//}
+	//spawn.Update(dt);
 
 
-	const float speed = 3.0f;
-	if (wnd.kbd.KeyIsPressed(VK_DOWN))
-	{
-		plank.MoveFreeY(-2.0f);
-	}
-	if (wnd.kbd.KeyIsPressed(VK_UP))
-	{
-		plank.MoveFreeY(2.0f);
-	}
-	if (wnd.kbd.KeyIsPressed(VK_LEFT))
-	{
-		//cam.MoveBy({ -speed,0.0f });
-	}
-	if (wnd.kbd.KeyIsPressed(VK_RIGHT))
-	{
-		//cam.MoveBy({ speed,0.0f });
-	}
+	//const float speed = 3.0f;
+	//if (wnd.kbd.KeyIsPressed(VK_DOWN))
+	//{
+	//	plank.MoveFreeY(-2.0f);
+	//}
+	//if (wnd.kbd.KeyIsPressed(VK_UP))
+	//{
+	//	plank.MoveFreeY(2.0f);
+	//}
+	//if (wnd.kbd.KeyIsPressed(VK_LEFT))
+	//{
+	//	//cam.MoveBy({ -speed,0.0f });
+	//}
+	//if (wnd.kbd.KeyIsPressed(VK_RIGHT))
+	//{
+	//	//cam.MoveBy({ speed,0.0f });
+	//}
 
-	const auto new_end = std::remove_if(balls.begin(), balls.end(),
-		[this](const Ball& b)
-		{
-			return b.GetPos().LenSq() > maxBallDistance * maxBallDistance;
-		});
-	balls.erase(new_end, balls.end());
-	
+	//const auto new_end = std::remove_if(balls.begin(), balls.end(),
+	//	[this](const Ball& b)
+	//	{
+	//		return b.GetPos().LenSq() > maxBallDistance * maxBallDistance;
+	//	});
+	//balls.erase(new_end, balls.end());
+	//
 
 	while (!wnd.mouse.IsEmpty())
 	{
@@ -128,14 +146,12 @@ void Game::UpdateModel()
 			cam.SetScale(cam.GetScale() * 0.95f);
 		}
 	}
-
-	/*
 	for (auto& entity : sf.getEntities())
 	{
 		entity.Update(dt);
-	
+
 	}
-	*/
+	
 }
 
 void Game::ComposeFrame()
@@ -146,21 +162,23 @@ void Game::ComposeFrame()
 	//camera transformations -> coordinate to center origin -> model -> line
 	//model vertices stored in entity
 
+	//cam.Draw(Drawable(star, Colors::Yellow));
+	
 	const auto vp = cam.getViewportRect();
-	cam.Draw(plank.GetDrawable());
+	/*cam.Draw(plank.GetDrawable());
 	for (const auto& ball : balls)
 	{
 		cam.Draw(ball.GetDrawable());
-	}
-	/*
+	}*/
+
 	for (auto& entity : sf.getEntities())
 	{
 		if (entity.GetBoundingRectangle().IsOverlappingWith(vp))
 		{
-			
+
 			cam.Draw(entity.GetDrawable());
 		}
 	}
-	*/
+	
 }
 

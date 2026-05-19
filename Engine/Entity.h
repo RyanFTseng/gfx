@@ -33,6 +33,16 @@ public:
 	{
 		return scale;
 	}
+	void SetAngle(float a)
+	{
+		angle = a;
+	}
+	float GetAngle() const
+	{
+		return angle;
+	}
+
+
 	void SetColor(Color c_in)
 	{
 		c = c_in;
@@ -41,9 +51,11 @@ public:
 	{
 		Drawable d(model, c);
 		d.Scale(scale);
+		d.Rotate(angle);
 		d.Translate(pos);
 		return d;
 	}
+
 
 protected:
 	void SetModel(std::vector<Vec2> model_in)
@@ -51,6 +63,7 @@ protected:
 		model = std::move(model_in);
 	}
 private:
+	float angle = 0.0f;
 	Color c;
 	float scale = 1.0f;
 	Vec2 pos = { 0.0f,0.0f };

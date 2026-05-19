@@ -56,7 +56,7 @@ private:
 	CoordinateTransformer ct;
 	Camera cam;
 	std::vector<Entity> entities;
-	//Starfield sf = Starfield(10000, 6000);
+	Starfield sf = Starfield(10000, 6000);
 	int prevMouseX;
 	int prevMouseY;
 	FrameTimer ft;
@@ -66,6 +66,9 @@ private:
 	Plank plank;
 
 	Sound collideSound = (L"Sounds\\arkpad.wav");
+
+	std::vector<Vec2> star;
+	float t = 0.0f;
 
 	/********************************/
 };

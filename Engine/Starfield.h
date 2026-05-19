@@ -3,6 +3,7 @@
 #include "Starbro.h"
 #include <random>
 #include <algorithm>
+#include "ChiliMath.h"
 
 class Starfield
 {
@@ -37,6 +38,7 @@ public:
 		std::uniform_real_distribution<float> phaseDist(0.0f, 2.0f * 3.14159f);
 		std::normal_distribution<float> radiusAmplitudeDist(meanRadiusAmplitude, devRadiusAmplitude);
 		std::normal_distribution<float> radiusFreqDist(meanRadiusFreq, devRadiusFreq);
+		std::uniform_real_distribution<float> rotSpeedDist(minRotSpeed, maxRotSpeed);
 
 		while (stars.size() < nStars)
 		{
@@ -65,9 +67,10 @@ public:
 			const float colorPhase = phaseDist(rng);
 			const float radiusFreq = radiusFreqDist(rng);
 			const float radiusPhase = phaseDist(rng);
+			const float rotSpeed = rotSpeedDist(rng);
 			
 			//place star in container
-			stars.emplace_back(pos, rad, rat, nFlares, c, colorFreq, colorPhase, radiusAmplitude, radiusFreq, radiusPhase);
+			stars.emplace_back(pos, rad, rat, nFlares, c, colorFreq, colorPhase, radiusAmplitude, radiusFreq, radiusPhase, rotSpeed);
 
 		}
 
@@ -100,6 +103,10 @@ private:
 	static constexpr float devRadiusFreq = 1.0f;
 	static constexpr float minRadiusFreq = 0.6f;
 	static constexpr float maxRadiusFreq = 4.0f;
+
+	static constexpr float minRotSpeed = -2.0f * PI;
+	static constexpr float maxRotSpeed = 2.0f * PI;
+
 
 
 
