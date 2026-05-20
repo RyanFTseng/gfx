@@ -98,14 +98,14 @@ void Game::UpdateModel()
 	//{
 	//	plank.MoveFreeY(2.0f);
 	//}
-	//if (wnd.kbd.KeyIsPressed(VK_LEFT))
-	//{
-	//	//cam.MoveBy({ -speed,0.0f });
-	//}
-	//if (wnd.kbd.KeyIsPressed(VK_RIGHT))
-	//{
-	//	//cam.MoveBy({ speed,0.0f });
-	//}
+	if (wnd.kbd.KeyIsPressed(VK_LEFT))
+	{
+		cam.SetAngle(cam.GetAngle()- 0.1);
+	}
+	if (wnd.kbd.KeyIsPressed(VK_RIGHT))
+	{
+		cam.SetAngle(cam.GetAngle() + 0.1);
+	}
 
 	//const auto new_end = std::remove_if(balls.begin(), balls.end(),
 	//	[this](const Ball& b)
@@ -125,13 +125,14 @@ void Game::UpdateModel()
 		{
 			prevMouseX = e.GetPosX();
 			prevMouseY = e.GetPosY();
+			
 		}
 		//check if mouse is moving and mouse is pressed down
 		else if (e.GetType() == Mouse::Event::Type::Move && wnd.mouse.LeftIsPressed())
 		{
 			float xSpeed = prevMouseX - (float)e.GetPosX();
 			float ySpeed = prevMouseY - (float)e.GetPosY();
-			cam.MoveBy({ xSpeed / cam.GetScale(), -ySpeed/cam.GetScale()});
+			cam.MoveBy(Vec2{ xSpeed / cam.GetScale(), -ySpeed / cam.GetScale() }.Rotate(-cam.GetAngle()));
 			prevMouseX = e.GetPosX();
 			prevMouseY = e.GetPosY();
 		}
