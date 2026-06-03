@@ -21,6 +21,8 @@
 #include "MainWindow.h"
 #include "Game.h"
 #include "ChiliMath.h"
+#include "Mat2.h"
+
 Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
@@ -32,7 +34,9 @@ Game::Game(MainWindow& wnd)
 {
 	
 	sf.generateField();
-	
+	Mat2 m = {1, 3, -6, 9};
+	Vec2 v = { -4, 3 };
+	auto w = m * v;
 }
 
 void Game::Go()
@@ -172,14 +176,26 @@ void Game::ComposeFrame()
 		cam.Draw(ball.GetDrawable());
 	}*/
 
-	for (auto& entity : sf.getEntities())
+	/*for (auto& entity : sf.getEntities())
 	{
 		if (entity.GetBoundingRectangle().IsOverlappingWith(vp))
 		{
 
 			cam.Draw(entity.GetDrawable());
 		}
+	}*/
+
+	auto star = Star::Make(100.0f, 50.0f);
+	const auto tform = Mat2::Rotation(0.3f);
+	const auto tform2 = Mat2::Scale(2.0f);
+	const auto tform3 = Mat2::FlipY();
+	for (auto& v : star)
+	{
+		v = tform * v;
+		v = tform2 * v;
+		v = tform3 * v;
 	}
+	cam.Draw(Drawable{ star, Colors::Green });
 	
 }
 
