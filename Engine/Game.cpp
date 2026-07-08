@@ -21,7 +21,7 @@
 #include "MainWindow.h"
 #include "Game.h"
 #include "ChiliMath.h"
-#include "Mat2.h"
+#include "Mat3.h"
 
 Game::Game(MainWindow& wnd)
 	:
@@ -34,9 +34,7 @@ Game::Game(MainWindow& wnd)
 {
 	
 	sf.generateField();
-	Mat2 m = {1, 3, -6, 9};
-	Vec2 v = { -4, 3 };
-	auto w = m * v;
+	
 }
 
 void Game::Go()
@@ -186,14 +184,16 @@ void Game::ComposeFrame()
 	}*/
 
 	auto star = Star::Make(100.0f, 50.0f);
-	const auto tform = Mat2::Rotation(0.3f);
-	const auto tform2 = Mat2::Scale(2.0f);
-	const auto tform3 = Mat2::FlipY();
-	const auto tformcat = tform3 * tform2 * tform;
+	const auto tform = Mat3::Rotation(0.3f);
+	const auto tform2 = Mat3::Scale(2.0f);
+	const auto tform3 = Mat3::FlipY();
+	const auto tform4 = Mat3::Translation(200.0f, 100.0f);
+	const auto tformcat = tform4 * tform3 * tform2 * tform;
 
 	for (auto& v : star)
 	{
-		v = tformcat * v;
+		auto v3 = (Vec3)v;
+		v = Vec2(tformcat * v3);
 	}
 	cam.Draw(Drawable{ star, Colors::Green });
 	
